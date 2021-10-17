@@ -39,7 +39,7 @@ class Fire(pygame.sprite.Sprite):
         for i in range(self.layers, -1, -1):
             alpha = 255 - i * (255 // self.layers - 5)
             if alpha <= 0:
-                alpha = 0
+                alpha = 0.01
             radius = int(self.radius * self.glow * i * i)
              
             if self.radius >3.5:
@@ -56,7 +56,7 @@ class Fire(pygame.sprite.Sprite):
 fire_group = pygame.sprite.Group()
 pygame.mouse.set_pos((WIDTH//2, HEIGHT//2))
 torch = pygame.image.load('torch.png')
-torch = pygame.transform.scale(torch, (60, 125))
+torch = pygame.transform.scale(torch, (60, 100))
 
 show_torch = True
 
