@@ -18,6 +18,12 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 
+def aabb(r1, r2, dx, dy):
+	if (r1.x + dx < r2.x + w and r1.x + w + dx > r2.x and
+		r1.y + dy < r2.y + h and r1.height + r1.y + dy > r2.y):
+		return True
+	return False
+
 clicked = False
 collision = False
 pos = None
@@ -41,6 +47,9 @@ while running:
 				new_pos = event.pos
 				relx = new_pos[0] - last[0]
 				rely = new_pos[1] - last[1]
+				if aabb(rect1, rect2, relx, rely):
+					relx = 0
+					rely = 0
 				rect1.x += relx
 				rect1.y += rely
 				last = new_pos
@@ -52,11 +61,7 @@ while running:
 			clicked = False
 			last = None
 
-	if (rect1.x < rect2.x + w and rect1.x + w > rect2.x and
-		rect1.y < rect2.y + h and rect1.height + rect1.y > rect2.y):
-		collision = True
-	else:
-		collision = False
+	
 
 	pygame.draw.rect(win, GREEN, rect1)
 	pygame.draw.rect(win, WHITE, rect2)
