@@ -4,10 +4,14 @@
 # 2 rectangles whose axis are aligned. means their is no rotation.
 
 import pygame
+import random
 
 pygame.init()
 WIDTH, HEIGHT = 640, 480
 win = pygame.display.set_mode((WIDTH, HEIGHT))
+
+clock = pygame.time.Clock()
+FPS = 30
 
 rect1 = pygame.Rect(10, 10, 100, 100)
 rect2 = pygame.Rect(WIDTH//2-50, HEIGHT//2-50, 100, 100)
@@ -28,6 +32,10 @@ clicked = False
 collision = False
 pos = None
 last = None
+
+rect_group = []
+counter = 0
+relx = rely = 0
 
 running = True
 while running:
@@ -61,10 +69,19 @@ while running:
 			clicked = False
 			last = None
 
-	
+	counter += 1
+	if counter % 15 == 0:
+		rect = pygame.Rect(random.randint(0, WIDTH-20), -20, 20, 20)
+		rect_group.append(rect)
+
+	for rect in rect_group:
+		if not aabb(rect2, rect, relx, rely):
+			rect.y += 5
+		pygame.draw.rect(win, WHITE, rect)
 
 	pygame.draw.rect(win, GREEN, rect1)
 	pygame.draw.rect(win, WHITE, rect2)
 
+	clock.tick(FPS)
 	pygame.display.update()
 pygame.quit()
