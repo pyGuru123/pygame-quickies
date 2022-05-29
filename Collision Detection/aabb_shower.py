@@ -13,8 +13,8 @@ win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 FPS = 30
 
-rect1 = pygame.Rect(10, 250, 100, 20)
-w, h = 100, 20
+w, h = 150, 20
+rect1 = pygame.Rect(10, 250, w, h)
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -22,8 +22,8 @@ BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 
 def aabb(r1, r2, dx, dy):
-	if ((r1.x + dx < r2.rect.x + r2.w) and (r1.x + w + dx > r2.rect.x) and
-		(r1.y + dy < r2.rect.y + r2.h) and (r1.height + r1.y + dy > r2.rect.y)):
+	if ((r1.x + dx < r2.x + r2.w) and (r1.x + w + dx > r2.x) and
+		(r1.y + dy < r2.y + r2.h) and (r1.y + h + dy > r2.y)):
 		return True
 	return False
 
@@ -36,7 +36,7 @@ class Box(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		super(Box, self).__init__()
 		self.w = self.h = 20
-		self.rect = pygame.Rect(x, y, 20, 20)
+		self.rect = pygame.Rect(x, y, self.w, self.h)
 		self.color = random.choice([RED, GREEN, BLUE])
 
 	def update(self, dx=0, dy=0):
@@ -45,7 +45,8 @@ class Box(pygame.sprite.Sprite):
 		if self.rect.y >= HEIGHT:
 			self.kill()
 
-		pygame.draw.rect(win, self.color, self.rect)
+		pygame.draw.rect(win, (48, 48, 48), self.rect)
+		pygame.draw.rect(win, self.color, self.rect, 1)
 
 box_group = pygame.sprite.Group()
 counter = 0
@@ -82,17 +83,22 @@ while running:
 			last = None
 
 	counter += 1
-	if counter % 15 == 0:
+	if counter % 5 == 0:
 		box = Box(random.randint(0, WIDTH-20), -20)
 		box_group.add(box)
 
 	for box in box_group:
-		if aabb(rect1, box, relx, rely):
-			dx, dy = -relx, -rely
-		else:
-			dx, dy = 0, 5
+		dy = 5
+		if aabb(rect1, box.rect, relx, rely):
+			if box.rect.y <= rect1.y:
+				dy = 0
 
-	box_group.update(dx, dy)
+			if rely:
+				dy = rely
+
+		box.update(0, dy)
+		
+	rely = 0
 	pygame.draw.rect(win, WHITE, rect1)
 
 	clock.tick(FPS)
