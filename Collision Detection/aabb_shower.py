@@ -32,6 +32,9 @@ collision = False
 pos = None
 last = None
 
+spikes_img = pygame.image.load('Assets/spikes.png')
+spikes_img = pygame.transform.scale(spikes_img, (430, 125))
+
 class Box(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		super(Box, self).__init__()
@@ -45,7 +48,8 @@ class Box(pygame.sprite.Sprite):
 		if self.rect.y >= HEIGHT:
 			self.kill()
 
-		pygame.draw.rect(win, (48, 48, 48), self.rect)
+		pygame.draw.rect(win, (72, 72, 72), self.rect)
+		pygame.draw.rect(win, WHITE, self.rect, 3)
 		pygame.draw.rect(win, self.color, self.rect, 1)
 
 box_group = pygame.sprite.Group()
@@ -55,7 +59,8 @@ dx, dy = 0, 5
 
 running = True
 while running:
-	win.fill((0,0,0))
+	win.fill((18, 18, 18))
+	win.blit(spikes_img, (0, HEIGHT-120))
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
