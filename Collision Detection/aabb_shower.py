@@ -49,6 +49,13 @@ class Box(pygame.sprite.Sprite):
 		pygame.draw.rect(win, WHITE, self.rect, 3)
 		pygame.draw.rect(win, self.color, self.rect, 1)
 
+def gradientRect( window, left_colour, right_colour, target_rect ):
+	colour_rect = pygame.Surface((2, 2))
+	pygame.draw.line(colour_rect, left_colour, (0, 0), (0, 1))
+	pygame.draw.line(colour_rect, right_colour, (1, 0), (1, 1))
+	colour_rect = pygame.transform.smoothscale(colour_rect, (target_rect.width, target_rect.height))
+	window.blit(colour_rect, target_rect)
+
 box_group = pygame.sprite.Group()
 counter = 0
 relx = rely = 0
@@ -57,6 +64,7 @@ dx, dy = 0, 5
 running = True
 while running:
 	win.fill((18, 18, 18))
+	gradientRect(win, (18,18, 18), (4, 4, 4), pygame.Rect(0, 0, WIDTH, HEIGHT))
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
@@ -96,7 +104,8 @@ while running:
 		box.update(0, dy)
 		
 	rely = 0
-	pygame.draw.rect(win, WHITE, rect1, 3)
+	gradientRect(win, (173, 6, 200), (255, 30, 0), rect1)
+	pygame.draw.rect(win, WHITE, rect1, 2)
 
 	clock.tick(FPS)
 	pygame.display.update()
